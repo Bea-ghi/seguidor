@@ -1,0 +1,42 @@
+import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.lcd.LCD;
+import lejos.robotics.SampleProvider;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.port.MotorPort;
+import lejos.utility.Delay;
+import lejos.hardware.Button;
+
+
+public class SeguidorDeLinha {
+	
+
+public static void main(String[] args) {
+	EV3ColorSensor sensor = new EV3ColorSensor(SensorPort.S1);
+	SampleProvider sample = sensor.getAmbientMode();
+	EV3LargeRegulatedMotor motorA = new EV3LargeRegulatedMotor(MotorPort.A);
+	EV3LargeRegulatedMotor motorD = new EV3LargeRegulatedMotor(MotorPort.D);
+
+while (Button.ESCAPE.isUp()) {
+	float[] sample1 = new float[sample.sampleSize()];
+	sample.fetchSample(sample1, 0);
+	float result = sample1[0];
+	LCD.drawString(""+ result, 0, 0);
+
+if (result <= 0.05) {
+	motorA.forward();
+	motorD.forward();
+	motorA.setSpeed(526);
+	motorD.setSpeed(304);
+
+}
+if (result > 0.05) {
+	motorA.forward();
+	motorD.forward();
+	motorA.setSpeed(304);
+	motorD.setSpeed(526);
+
+	}
+
+}
+ 
